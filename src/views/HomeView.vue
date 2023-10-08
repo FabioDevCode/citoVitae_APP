@@ -1,43 +1,51 @@
 <script setup>
 import SignupForm from '@/components/SignupForm.vue';
 import Loginform from '@/components/LoginForm.vue';
-import image from '@/assets/images/cito_vitae_logo_long_white.svg';
+import image from '@/assets/images/cito_vitae_white.svg';
 import { Button } from 'flowbite-vue';
 import { ref } from 'vue';
+import { userStore } from '@/stores/user'
 
+userStore().token = '';
 const toggle = ref(false);
-
 
 function moveWelcome() {
     document.querySelector('#welcome').classList.toggle('login');
     setTimeout(()=>{
         toggle.value = !toggle.value;
-    }, 150);
+    }, 250);
 }
-
 </script>
 
 <template>
     <div id="home-container">
         <div id="welcome" class="">
+            <img :src="image" alt="Logo Cito Vitae blanc">
+
             <h1>
                 Bienvenue sur c<span>i</span>t<span class="right">o</span> v<span>i</span>t<span>a</span>e !
             </h1>
-            <img :src="image" alt="Logo Cito Vitae blanc">
-            <p>
-                Lorem ipsum dolor sit amet consectetur, 
-                adipisicing elit. Quo quas, vitae reiciendis 
-                repudiandae adipisci possimus quidem a dolorem, 
-                quaerat quod nisi molestiae, quisquam doloribus commodi 
-                sunt? Eius voluptatibus adipisci accusantium, reprehenderit, 
-                autem nulla mollitia deleniti ipsam harum eum ea modi? Neque 
-                similique mollitia possimus natus hic, eaque voluptatibus libero nihil 
-                deserunt veritatis magni odio ducimus illo quibusdam pariatur adipisci. 
-                Consectetur, accusantium dignissimos? Veniam rem maxime animi temporibus 
-                fuga veritatis eos sint culpa est non minus assumenda unde, magni atque 
-                impedit quo, ullam repellendus deleniti quae! Labore cum odit totam illo. 
-                Sapiente ipsam asperiores suscipit ex assumenda velit ipsum molestias recusandae.
-            </p>
+
+            <div class="welcome-text" v-if="!toggle">
+                <p>Ton <b>mot de passe</b> doit :</p>
+                <ul>
+                    <li>- faire au minimum <b>12</b> caractères</li>
+                    <li>- au maximum <b>100</b> caractères</li>
+                    <li>
+                        - contenir 
+                        <b>1</b> majuscule, 
+                        <b>1</b> minuscule, 
+                        <b>1</b> chiffre et 
+                        <b>1</b> caractère spécial
+                    </li>
+                </ul>
+            </div>
+            <div class="welcome-text" v-if="toggle">
+                <p>Ravie de vous revoir ici !</p>
+                <p>Phrase captivante et motivante</p>
+                <p>Qui tiens sur trois lignes</p>
+                <p>Pas vraiment comme celle-ci.</p>
+            </div>
 
             <Button v-if="!toggle" @click="moveWelcome()" color="light" size="lg" loading-position="suffix">
                 Se connecter
@@ -49,6 +57,7 @@ function moveWelcome() {
                 </svg>
                 </template>
             </Button>
+
             <Button v-if="toggle" @click="moveWelcome()" color="light" size="lg" loading-position="prefix">
                 S'inscrie
                 <template #prefix>
@@ -59,8 +68,6 @@ function moveWelcome() {
                 </svg>
                 </template>
             </Button>
-
-
         </div>
 
         <div class="container_form">
@@ -70,7 +77,6 @@ function moveWelcome() {
         <div class="container_form">
             <Loginform v-if="toggle" />
         </div>
-
     </div>
 </template>
 
@@ -110,11 +116,15 @@ function moveWelcome() {
     background-color: #35605A;
     transition: left 300ms ease-in-out;
     left: 45vw;
+    box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, 
+    rgba(0, 0, 0, 0.12) 0px -12px 30px, 
+    rgba(0, 0, 0, 0.12) 0px 4px 6px, 
+    rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
 }
 
 #welcome img {
-    width: 45%;
-    margin: 50px auto;
+    height: 7vw;
+    margin-bottom: 15px;
 }
 
 #welcome h1 {
@@ -122,21 +132,22 @@ function moveWelcome() {
     display: inline-block;
     display: flex;
     font-size: 3.6em;
+    font-size: 3vw;
     font-weight: 600;
-    margin: 25px auto;
+    margin: 35px auto 50px auto;
 }
 #welcome h1 span {
     display: inline-block;
-    margin-top: -7px;
+    margin-top: -0.6vw;
 }
 #welcome h1 span.right {
     margin-right: 10px;
 }
-#welcome p {
+#welcome .welcome-text {
     display: inline-block;
     width: 60%;
     line-height: 1.8em;
-    margin-bottom: 100px;
+    margin-bottom: 120px;
 }
 
 

@@ -1,14 +1,16 @@
 <script setup>
+import { useApiStore } from '@/stores/api'
+import { userStore } from '@/stores/user'
 import { Input, Button } from 'flowbite-vue'
 import { ref } from 'vue'
 
 const pseudo = ref('');
 const password = ref('');
 
-async function submit() {
-    const call = await fetch('http://localhost:3030/api/user/login', {
+async function login() {
+    const call = await fetch(useApiStore().baseUrl+'/user/login', {
         headers: {
-            'Accept': '*/*',
+            'Accept': 'application/json',
             'Content-Type': 'application/json'
         },
         method: 'POST',
@@ -17,19 +19,22 @@ async function submit() {
             password: password.value,
         })
     })
-    const resp = await call.json();
 
-    console.log(resp);
+    const resp = await call.json();
+    if(resp.token.length) {
+        userStore().token = resp.token;
+    }
+    window.location = '/profil';
 }
 </script>
 
 <template>
     <form @submit.prevent id="login_form">
-        <Input v-model="pseudo" size="" label="Pseudo" placeholder="choisissez un pseudo" class="focus:ring-green-500 focus:border-green-500" />
+        <Input v-model="pseudo" size="" label="Pseudo" placeholder="votre pseudo" class="focus:ring-green-500 focus:border-green-500" />
         <br>
-        <Input v-model="password" type="password" label="Mot de passe" placeholder="mot de passe" class="focus:ring-green-500 focus:border-green-500" />
+        <Input v-model="password" type="password" label="Mot de passe" placeholder="votre mot de passe" class="focus:ring-green-500 focus:border-green-500" />
         <br>
-        <Button @click="submit()" class="button" color="green" size="lg">Se connecter</Button>
+        <Button @click="login()" class="button" color="green" size="lg">Se connecter</Button>
     </form>
 </template>
 
